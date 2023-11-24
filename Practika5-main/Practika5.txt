@@ -1,0 +1,204 @@
+//Основной класс Point:
+kotlin
+class Point(private var x: Double, private var y: Double) {
+
+    // Первичный конструктор
+    constructor() : this(0.0, 0.0)
+
+    // Вторичный конструктор
+    constructor(x: Double) : this(x, 0.0)
+
+    // Вторичный конструктор
+    constructor(point: Point) : this(point.x, point.y)
+
+    // Свойства для доступа к координатам
+    var X: Double
+        get() = x
+        set(value) {
+            x = value
+        }
+
+    var Y: Double
+        get() = y
+        set(value) {
+            y = value
+        }
+
+    // Метод для вывода информации
+    fun printInfo() {
+        println("Point: ($x, $y)")
+    }
+}
+
+//Класс ColoredPoint, наследующий класс Point:
+kotlin
+class ColoredPoint(x: Double, y: Double, private var color: String) : Point(x, y) {
+
+    // Вторичный конструктор
+    constructor(color: String) : this(0.0, 0.0, color)
+
+    // Свойство для доступа к цвету
+    var Color: String
+        get() = color
+        set(value) {
+            color = value
+        }
+
+    // Метод для вывода информации
+    override fun printInfo() {
+        println("Colored Point: ($X, $Y), Color: $color")
+    }
+}
+
+//Класс Line, использующий две точки:
+kotlin
+class Line(private var p1: Point, private var p2: Point) {
+
+    // Первичный конструктор
+    constructor() : this(Point(), Point())
+
+    // Вторичный конструктор
+    constructor(x1: Double, y1: Double, x2: Double, y2: Double) : this(Point(x1, y1), Point(x2, y2))
+
+    // Свойства для доступа к точкам
+    var P1: Point
+        get() = p1
+        set(value) {
+            p1 = value
+        }
+
+    var P2: Point
+        get() = p2
+        set(value) {
+            p2 = value
+        }
+
+    // Метод для вывода информации
+    fun printInfo() {
+        println("Line: Point1($$P1.X, ${P1.Y}), Point2(${P2.X}, ${P2.Y})")
+    }
+}
+
+//Класс ColoredLine, наследующий класс Line:
+kotlin
+class ColoredLine(p1: Point, p2: Point, private var color: String) : Line(p1, p2) {
+
+    // Вторичный конструктор
+    constructor(color: String) : this(Point(), Point(), color)
+
+    // Свойство для доступа к цвету
+    var Color: String
+        get() = color
+        set(value) {
+            color = value
+        }
+
+    // Метод для вывода информации
+    override fun printInfo() {
+        println("Colored Line: Point1($${P1.X}, ${P1.Y}), Point2(${P2.X}, ${P2.Y}), Color: $color")
+    }
+}
+
+//Класс Polygon, использующий список точек:
+kotlin
+class Polygon(private val points: MutableList<Point>) {
+
+    // Первичный конструктор
+    constructor() : this(mutableListOf())
+
+    // Вторичный конструктор
+    constructor(vararg points: Point) : this(points.toMutableList())
+
+    // Свойство для доступа к точкам
+    var Points: MutableList<Point>
+        get() = points
+        set(value) {
+            points.clear()
+            points.addAll(value)
+        }
+
+    // Методы для перемещения по осям
+    fun moveOX(delta: Double) {
+        for (point in points) {
+            point.X += delta
+        }
+    }
+
+    fun moveOY(delta: Double) {
+        for (point in points) {
+            point.Y += delta
+        }
+    }
+
+    fun moveBoth(deltaX: Double, deltaY: Double) {
+        for (point in points) {
+            point.X += deltaX
+            point.Y += deltaY
+        }
+    }
+
+    // Метод для вывода информации
+    fun printInfo() {
+        println("Polygon:")
+        for (i in points.indices) {
+            println("Point${i + 1}: (${points[i].X}, ${points[i].Y})")
+        }
+    }
+}
+
+//Пример использования классов:
+kotlin
+fun main() {
+    // Создание объектов класса Point
+    val point1 = Point(2.5, 3.7)
+    val point2 = Point()
+    val point3 = Point(point1)
+
+    point1.printInfo()
+    point2.printInfo()
+    point3.printInfo()
+    println()
+
+    // Создание объектов класса ColoredPoint
+    val coloredPoint1 = ColoredPoint(2.5, 3.7, "red")
+    val coloredPoint2 = ColoredPoint(color = "blue")
+
+    coloredPoint1.printInfo()
+    coloredPoint2.printInfo()
+    println()
+
+    // Создание объектов класса Line
+    val line1 = Line(point1, point2)
+    val line2 = Line(1.0, 2.0, 3.0, 4.0)
+
+    line1.print
+    Info()
+    line2.printInfo()
+    println()
+
+    // Создание объектов класса ColoredLine
+    val coloredLine1 = ColoredLine(point1, point2, "red")
+    val coloredLine2 = ColoredLine(color = "blue")
+
+    coloredLine1.printInfo()
+    coloredLine2.printInfo()
+    println()
+
+    // Создание объектов класса Polygon
+    val points = mutableListOf(Point(1.0, 2.0), Point(3.0, 4.0), Point(5.0, 6.0))
+    val polygon1 = Polygon(points)
+    val polygon2 = Polygon(Point(1.0, 2.0), Point(3.0, 4.0), Point(5.0, 6.0))
+    val polygon3 = Polygon(*points.toTypedArray())
+
+    polygon1.printInfo()
+    polygon2.printInfo()
+    polygon3.printInfo()
+    println()
+
+    // Изменение цвета точки и линии
+    coloredPoint1.Color = "green"
+    println("New color of coloredPoint1: ${coloredPoint1.Color}")
+
+    coloredLine1.Color = "yellow"
+    println("New color of coloredLine1: ${coloredLine1.Color}")
+}
